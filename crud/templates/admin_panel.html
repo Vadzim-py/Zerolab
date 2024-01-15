@@ -1,0 +1,133 @@
+{% extends 'core/base.html' %}
+
+{% load static %}   
+
+{% block content %}
+    
+<title>Admin management</title>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">Administration</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="btn btn-success" data-bs-toggle="offcanvas" href="#offcanvasExample" 
+                   role="button" aria-controls="offcanvasExample">
+                      Actions
+                    <i class="bi bi-layout-sidebar-inset"></i>
+                </a>
+            </li>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% if user.is_superuser or user.is_staff %}
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'users:profile' %}">
+                                        Profile
+                                    </a>
+                                </li>
+                            {% endif %}
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'index' %}">
+                                    Home
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'products:index' %}">
+                                    Articles
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'users:logout' %}">
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            {% include 'core/theme_change.html' %}
+        </div>
+        </ul>
+    </div>
+</nav>
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+	<div class="offcanvas-header">
+		<h5 class="offcanvas-title" id="offcanvasExampleLabel">Close</h5> 
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button> 
+    </div>
+	<div class="offcanvas-body"> 
+        {% include 'offcanvas.html' %} 
+    </div>
+</div>
+    
+<div class="d-flex justify-content-center">
+    {% if messages or form.non_field_errors %}
+        <div class="alert alert-success" role="alert">
+            <div class="messages">
+            {% for message in messages %}
+                    {{ message }}
+            {% endfor %}
+        {% else %}
+            {{ form.non_field_errors }}
+        {% endif %}
+        </div>
+    </div>
+</div>
+
+    <br><br><br><br><br><br><br>
+    
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-sm">
+      <div class="card" style="width: 25rem;">
+        <img class="card-img-top" src="{% static 'img/categories/users.png' %}" alt="Card image cap">
+        <div class="card-body">
+          <div class="d-grid gap-2">
+                <a href="{% url 'crud:user_list' %}" class="btn btn-primary" role="button" aria-disabled="true">
+                    Users
+                </a>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="card" style="width: 25rem;">
+        <img class="card-img-top" src="{% static 'img/categories/products.png' %}" alt="Card image cap">
+        <div class="card-body">
+            <div class="d-grid gap-2">
+                <a href="{% url 'crud:product_list' %}" class="btn btn-primary" role="button" aria-disabled="true">
+                    Products
+                </a>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="card" style="width: 25rem;">
+        <img class="card-img-top" src="{% static 'img/categories/categories.png' %}" alt="Card image cap">
+        <div class="card-body">
+            <div class="d-grid gap-2">
+                <a href="{% url 'crud:category_list' %}" class="btn btn-primary" role="button" aria-disabled="true">
+                    Categories
+                </a>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+{% endblock %}

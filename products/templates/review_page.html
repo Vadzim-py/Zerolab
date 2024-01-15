@@ -1,0 +1,114 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<title>Reviews and ratings</title>
+
+<link href="{% static 'rating/rating.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+<nav class="navbar navbar-expand bg-body-tertiary">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">All rating and reviews</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+         <a class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'products:index' %}"> Articles <i class="bi bi-book"></i></a>
+                </li>
+            </ul>
+            {% include 'core/theme_change.html' %}
+        </a>
+    </div>
+</nav>
+
+<br>
+    
+<div class="d-flex justify-content-center">
+{% if messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <div class="messages">
+            {% for message in messages %}
+                <div class="{{ message.tags }}">
+                    {{ message|safe }}
+                </div>
+            {% endfor %}
+        </div>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+</div>
+    
+{% for i in reviews %}
+    
+<div class="container">
+<div class="card border-dark mb-3">    
+<div class="card">
+  <div class="card-header">
+        {% if i.rating > 0 %} 
+        <i class="fa fa-star {% if i.rating  < 1 %} no-checked {% else %} checked {% endif %}" id="check-star"></i> 
+        <i class="fa fa-star {% if i.rating  < 2 %} no-checked {% else %} checked {% endif %} " id="check-star"></i> 
+        <i class="fa fa-star {% if i.rating  < 3 %} no-checked {% else %} checked {% endif %} " id="check-star"></i> 
+        <i class="fa fa-star {% if i.rating  < 4 %} no-checked {% else %} checked {% endif %} " id="check-star"></i> 
+        <i class="fa fa-star {% if i.rating  < 5 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+    {% else %} 
+        <i class="fa fa-star " id="star"></i> 
+        <i class="fa fa-star" id="star"></i> 
+        <i class="fa fa-star" id="star"></i> 
+        <i class="fa fa-star" id="star"></i> 
+        <i class="fa fa-star" id="star"></i> &nbsp;
+            <span>No ratings</span>
+    {% endif %} 
+  </div>          
+    <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p>{{ i.overview }}</p>
+                    <footer class="blockquote-footer">{{ i.user }} <cite title="Source title">about {{ i.product.name }} </cite>
+                    </footer>
+            </blockquote>
+            </div>
+        </div>
+    </div>   
+ </div>    
+{% endfor %}    
+    
+<form method="POST" action=""> 
+    {% csrf_token %}
+    <div class="container">
+	<div class="card mb-3" style="max-width: 540px;">
+        <div class="card shadow-lg border-2">
+        <div class="card-body">
+        <h5 class="card-title">Write a review</h5>
+		<form method="POST"> 
+            {% csrf_token %}
+			<div class="form">
+				<div class="rating"> <input type="radio" id="star5" name="rating" value="5"/> 
+                    <label class="star" for="star5" title="Awesome" aria-hidden="true"></label> 
+                    <input type="radio" id="star4" name="rating" value="4" /> 
+                    <label class="star" for="star4" title="Great" aria-hidden="true"></label> 
+                    <input type="radio" id="star3" name="rating" value="3" /> 
+                    <label class="star" for="star3" title="Very good" aria-hidden="true"></label> 
+                    <input type="radio" id="star2" name="rating" value="2" /> 
+                    <label class="star" for="star2" title="Good" aria-hidden="true"></label> 
+                    <input type="radio" id="star1" name="rating" value="1" /> 
+                    <label class="star" for="star1" title="Bad" aria-hidden="true"></label> 
+                </div>
+			</div>
+                                        <br><br><br><br><br>
+                <div class="form-group">
+                {{ form.item_review }}
+                </div>
+				<div class="col-md-4"> 
+                    <input type="submit" class="btn btn-success mt-2" value="Post"> 
+                </div>
+            </form>
+        </div>
+    </div>        
+</form>
+    
+{% endblock %}

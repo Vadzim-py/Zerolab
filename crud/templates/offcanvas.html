@@ -1,0 +1,31 @@
+<div class="card" style="width: 18rem;">
+	<div class="card-header"> Switch to </div>
+	<ul class="list-group list-group-flush">
+		<li class="list-group-item"><a href="{% url 'admin:index' %}">Django admin</a></li>
+	</ul>
+</div> 
+<br>
+<div class="card" style="width: 18rem;">
+	<div class="card-header"> Manage to </div>
+	<ul class="list-group list-group-flush">
+		<li class="list-group-item"><a href="{% url 'crud:user_list' %}">Users</a></li>
+		<li class="list-group-item"><a href="{% url 'crud:product_list' %}">Products</a></li>
+		<li class="list-group-item"><a href="{% url 'crud:category_list' %}">Categories</a></li>
+	</ul>
+</div> 
+<br>
+<div class="card" style="width: 18rem;">
+	<div class="card-header"> Create a </div>
+	<ul class="list-group list-group-flush">
+		<li class="list-group-item"><a href="{% url 'crud:user_add' %}">User</a></li>
+		<li class="list-group-item"><a href="{% url 'crud:product_add' %}">Product</a></li>
+		<li class="list-group-item"><a href="{% url 'crud:category_add' %}">Category</a></li>
+	</ul>
+</div>
+<br>
+<div class="card" style="width: 18rem;">
+	<div class="card-header"> Reset </div>
+	<ul class="list-group list-group-flush">
+		<li class="list-group-item"><a href="{% url 'password_reset'%}">Password via email</a></li>
+	</ul>
+</div>

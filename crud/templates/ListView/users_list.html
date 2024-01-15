@@ -1,0 +1,152 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<title>Users management</title>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container">
+            <a class="navbar-brand" >Users management</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="btn btn-success" data-bs-toggle="offcanvas" href="#offcanvasExample" 
+                   role="button" aria-controls="offcanvasExample">
+                      Actions
+                    <i class="bi bi-layout-sidebar-inset"></i>
+                </a>
+            </li>
+            <a class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-fill-check"></i>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li>
+                        <a class="dropdown-item" href="{% url 'index' %}">
+                            Home
+                        </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'users:profile' %}">Profile</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'users:logout' %}">
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {% else %}
+                    <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:login' %}">Login <i class="bi bi-box-arrow-in-right"></i></a>
+                </li>
+                {% endif %}
+            </ul>
+            {% include 'core/theme_change.html' %}
+            </a>
+        </ul>        
+        </div>
+    </nav>
+    
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+	<div class="offcanvas-header">
+		<h5 class="offcanvas-title" id="offcanvasExampleLabel">Close</h5> 
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button> 
+    </div>
+	<div class="offcanvas-body"> 
+        {% include 'offcanvas.html' %} 
+    </div>
+</div>    
+
+<div class="d-flex justify-content-center">
+{% if messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="messages">
+            {% for message in messages %}
+                <div class="{{ message.tags }}">
+                    {{ message|safe }}
+                </div>
+            {% endfor %}
+        </div>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+</div>
+
+<div class="table-responsive">
+    <div class="d-flex justify-content-center">
+        <div class="col-lg-5">
+            <div class="card shadow-lg border-1 rounded-lg mt-5">
+        {% if users %}
+        <table class="table table-auto table-bordered table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Superuser</th>
+                    <th scope="col">Staff</th>
+                    <th scope="col">Activity</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+           <tbody>
+                {% for user in users %}
+                <tr>
+                    <th scope="row">{{ user.id }}</th>
+                    <td>{{ user.username }}</td>
+                    <td>{% if user.is_superuser %}<i class="bi bi-check-circle-fill"></i></td>
+                    {% endif %}
+                    <td>{% if user.is_staff %}<i class="bi bi-check-circle"></i></td>
+                    {% endif %}
+                    <td>{% if user.is_active %}<i class="bi bi-check2-circle"></i></td>
+                    {% endif %}
+                    <td>
+                        <a href="{% url 'crud:user_update' user.id %}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{% url 'crud:user_delete' user.id %}" method="POST" class="d-inline">
+                            {% csrf_token %}
+                            <input type="submit" value="Delete" class="btn btn-danger btn-sm">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+           </tbody>
+        </table>
+        <a href="{% url 'crud:user_add' %}" class="btn btn-success btn-success btn-block"
+           role="button" aria-pressed="true">Add user
+        </a>
+        {% else %}
+        <h4 class="text-center alert alert-warning">No Record</h4>
+        {% endif %}
+ </div>
+
+<br><br>
+
+<nav aria-label="Page navigation">
+    <ul style="" class="pagination justify-content-center">
+        {% if users.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ users.previous_page_number }}">Previous</a></li>
+        {% endif %}
+        {% for page in page_obj.paginator.page_range %}
+        {% if page == users.number %}
+            <li class="page-item active"><a class="page-link" href="?page={{page}}">{{page}}</a></li>
+        {% elif page > users.number|add:-3 and page < users.number|add:3 %}
+            <li class="page-item"><a class="page-link" href="?page={{page}}">{{page}}</a></li>
+        {% endif %}
+      {% endfor %}
+        {% if users.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ users.next_page_number }}">Next</a></li>
+        {% endif %}
+    </ul>
+</nav>
+
+{% endblock %}

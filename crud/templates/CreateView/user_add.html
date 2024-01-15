@@ -1,0 +1,124 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+ <title>Add user</title>
+
+<body>
+
+<nav class="navbar navbar-expand bg-body-tertiary">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'crud:user_list' %}">Add user</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+         <a class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'crud:user_list' %}"> Back
+                        <i class="bi bi-list-columns-reverse"></i>
+                    </a>
+                </li>
+            </ul>
+             {% include 'core/theme_change.html' %}
+        </a>
+    </div>
+</nav>
+
+<div class="d-flex justify-content-center">
+    {% if messages or form.errors %}
+        <div class="alert alert-warning" role="alert">
+            <div class="messages">
+            {% if messages %}
+                {% for message in messages %}
+                    {{ message }}
+            {% endfor %}
+        {% else %}
+            {{ form.errors }}
+        {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-lg-7">
+			<div class="card shadow-lg border-1 rounded-lg mt-5">
+				<div class="card-header">
+					<h4 class="text-center font-weight-light my-4">Create a user here </h4>
+				</div>
+				<div class="card-body">
+					<form action="{% url 'crud:user_add' %}" method="post"> {% csrf_token %}
+						<div class="row">
+							<div class="col">
+								<div class="form-group"> 
+                                    <label class="small mb-1" for="{{ form.first_name.id_for_label }}">
+                                        First name
+                                    </label> {{ form.first_name }} 
+                                </div>
+							</div>
+							<div class="col">
+								<div class="form-group"> 
+                                    <label class="small mb-1" for="{{ form.last_name.id_for_label }}">
+                                        Last name
+                                    </label> {{ form.last_name }} 
+                                </div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col"> 
+                                <label class="small mb-1" for="{{ form.username.id_for_label }}">
+                                    Username
+                                </label> {{ form.username }} 
+                            </div>
+							<div class="col"> 
+                                <label class="small mb-1" for="{{ form.email.id_for_label }}">
+                                    email
+                                </label> {{ form.email }} 
+                            </div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="form-group"> 
+                                    <label class="small mb-1" for="{{ form.password1.id_for_label }}">
+                                        Password
+                                    </label> {{ form.password1 }} 
+                                </div>
+							</div>
+							<div class="col">
+								<div class="form-group"> 
+                                    <label class="small mb-1" for="{{ form.password2.id_for_label }}">
+                                        Confirm password
+                                    </label> {{ form.password2 }} 
+                                </div>
+							</div>
+						</div> <br>
+						<div class="form-row">
+                            {{ form.is_superuser }} 
+                            <label class="form-check-label" for="{{ form.is_superuser.id_for_label }}">
+                            {{ form.is_superuser.label }}
+                        </label> 
+                        </div>
+						<div class="form-row">
+                            {{ form.is_staff }} 
+                            <label class="form-check-label" for="{{ form.is_staff.id_for_label }}">
+                        {{ form.is_staff.label }}
+                        </label> 
+                        </div>
+						<div class="form-group mt-4 mb-0"> 
+                            <input class="btn btn-success btn-block" type="submit" value="Create account"> 
+                        </div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+
+{% endblock %}
+
+

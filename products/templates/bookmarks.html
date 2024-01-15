@@ -1,0 +1,24 @@
+{% if bookmarks %}
+    
+    {% for bookmark in bookmarks %}
+        {% if bookmark.user == request.user %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{{ bookmark.product.url }}">{{ bookmark.product.name }}</a></h5>
+                    <p class="card-text">{{ bookmark.product.description }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'products:bookmark_delete' bookmark.id %}" 
+                       class="btn btn-danger btn-block" role="button" aria-pressed="true">Unmark
+                        <i class="bi bi-bookmark-x-fill"></i>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+    
+{% else %}
+    <h5 class="mt-3 mb-3 text-center">
+        There are no bookmarks
+    </h5>
+{% endif %}
